@@ -1,0 +1,383 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amma Dance Collections | The Future of Tradition</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           1. FUTURISTIC VARIABLES & RESET
+        ========================================= */
+        :root {
+            --bg-deep: #030304;
+            --bg-panel: rgba(15, 15, 18, 0.4);
+            --gold: #D4AF37;
+            --gold-bright: #FFE58F;
+            --text-main: #E8E8E8;
+            --text-muted: #8A8A93;
+            --glow-subtle: 0 0 15px rgba(212, 175, 55, 0.15);
+            --glow-strong: 0 0 30px rgba(212, 175, 55, 0.5);
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { 
+            background-color: var(--bg-deep); 
+            color: var(--text-main); 
+            font-family: var(--font-body); 
+            line-height: 1.7; 
+            overflow-x: hidden; 
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-heading); color: var(--gold-bright); font-weight: 500; }
+
+        /* =========================================
+           2. ULTRA-SLEEK NAVIGATION
+        ========================================= */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 15px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(3,3,4,0.9), rgba(3,3,4,0));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo-img { height: 50px; width: auto; filter: drop-shadow(var(--glow-subtle)); transition: 0.4s; }
+        .logo-img:hover { filter: drop-shadow(var(--glow-strong)); transform: scale(1.05); }
+
+        .nav-links { list-style: none; display: flex; gap: 40px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 0.8rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        /* Futuristic Link Underline Effect */
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0%; height: 1px;
+            bottom: -5px; left: 0;
+            background-color: var(--gold);
+            box-shadow: var(--glow-subtle);
+            transition: 0.4s ease-in-out;
+        }
+        .nav-links a:hover { color: var(--gold-bright); text-shadow: var(--glow-subtle); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* =========================================
+           3. CYBER-ELEGANCE HERO SECTION
+        ========================================= */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(to bottom, rgba(3,3,4,0.3), rgba(3,3,4,0.95)), url("{% static 'bg1.jpeg' %}");
+            background-size: cover;
+            background-position: center 20%;
+            background-attachment: fixed;
+        }
+
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, #030304 90%);
+        }
+
+        .hero-content { position: relative; z-index: 2; animation: fadeInUp 1.5s ease; }
+
+        .hero h1 {
+            font-size: 5.5rem;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+            text-shadow: var(--glow-strong);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-weight: 300;
+        }
+
+        /* Futuristic Glowing Button */
+        .btn-futuristic {
+            position: relative;
+            display: inline-block;
+            padding: 18px 50px;
+            color: var(--gold);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.03);
+            backdrop-filter: blur(5px);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: 0.4s;
+            box-shadow: var(--glow-subtle);
+        }
+
+        .btn-futuristic::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent);
+            transition: 0.6s;
+        }
+
+        .btn-futuristic:hover {
+            border-color: var(--gold);
+            box-shadow: var(--glow-strong);
+            color: var(--gold-bright);
+            transform: translateY(-3px);
+        }
+
+        .btn-futuristic:hover::before { left: 100%; }
+
+        /* =========================================
+           4. SHARED LAYOUT & DIGITAL GRIDS
+        ========================================= */
+        .section-padding { padding: 140px 50px; position: relative; }
+        .section-header { text-align: center; margin-bottom: 80px; position: relative; z-index: 2; }
+        .section-title { font-size: 3.5rem; margin-bottom: 20px; letter-spacing: 2px; }
+        .section-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; letter-spacing: 1px; font-weight: 300; }
+
+        /* Futuristic background pattern */
+        .digital-grid {
+            background-color: var(--bg-deep);
+            background-image: 
+                linear-gradient(rgba(212, 175, 55, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212, 175, 55, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* =========================================
+           5. ABOUT SECTION
+        ========================================= */
+        .about p {
+            max-width: 800px; margin: 0 auto; color: var(--text-muted);
+            font-size: 1.15rem; line-height: 2.2; font-weight: 300;
+            text-align: center; position: relative; z-index: 2;
+        }
+
+        /* =========================================
+           6. COLLECTIONS (Parallax Background 2)
+        ========================================= */
+        .collections {
+            background: linear-gradient(rgba(3,3,4,0.85), rgba(3,3,4,0.98)), url("{% static 'bg2.jpeg' %}");
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;
+        }
+
+        /* Aesthetic Glass Cards */
+        .grid-item {
+            background: var(--bg-panel);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            height: 300px;
+            display: flex; justify-content: center; align-items: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+        }
+
+        .grid-item::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 0%; height: 2px; background: var(--gold); box-shadow: var(--glow-strong);
+            transition: 0.5s ease;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: rgba(212, 175, 55, 0.4);
+            background: rgba(20, 20, 25, 0.6);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), var(--glow-subtle);
+        }
+
+        .grid-item:hover::after { width: 100%; }
+
+        .grid-item a { text-decoration: none; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2; }
+        
+        .grid-item h3 {
+            color: var(--text-main); font-size: 2rem; letter-spacing: 3px;
+            transition: 0.4s ease; font-weight: 400; text-transform: uppercase;
+        }
+
+        .grid-item:hover h3 { color: var(--gold-bright); text-shadow: var(--glow-strong); letter-spacing: 5px; }
+
+        /* =========================================
+           7. FOOTER
+        ========================================= */
+        footer {
+            background-color: #010101; text-align: center; padding: 100px 20px 40px;
+            border-top: 1px solid rgba(212, 175, 55, 0.1); position: relative;
+        }
+
+        footer h2 { font-size: 2.5rem; margin-bottom: 60px; letter-spacing: 2px; }
+
+        .contact-grid { display: flex; justify-content: center; gap: 80px; margin-bottom: 60px; flex-wrap: wrap; }
+        
+        .contact-item h3 {
+            font-size: 0.9rem; margin-bottom: 15px; letter-spacing: 4px;
+            text-transform: uppercase; color: var(--text-muted); font-family: var(--font-body);
+        }
+        
+        .contact-item p { color: var(--text-main); line-height: 2; font-size: 1.1rem; font-weight: 300; }
+
+        .copyright {
+            padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.8rem; color: #555; letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        /* Simple Load Animation */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= NAVIGATION ================= -->
+    <nav id="navbar">
+        <div class="logo-container">
+            <a href="#home">
+                <img src="{% static 'logo.png' %}" alt="Amma Dance Collections Logo" class="logo-img">
+            </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#collections">Collections</a></li>
+            <li><a href="#jewellery">Jewellery</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- ================= HERO SECTION ================= -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1>AMMA DANCE</h1>
+            <p>The Future of Traditional Elegance</p>
+            <a href="#collections" class="btn-futuristic">Enter Collection</a>
+        </div>
+    </header>
+
+    <!-- ================= ABOUT SECTION ================= -->
+    <section id="about" class="digital-grid section-padding">
+        <div class="section-header">
+            <h2 class="section-title">A New Era of Artistry</h2>
+        </div>
+        <p>
+            Bridging the gap between ancient cultural heritage and modern design, Amma Dance Collections provides meticulously crafted dance costumes and temple jewellery. Engineered for the modern performer, our pieces illuminate the stage, offering unmatched aesthetic brilliance for Bharatnatyam, Kuchipudi, and Mohiniyattam artists.
+        </p>
+    </section>
+
+    <!-- ================= DANCE COSTUMES ================= -->
+    <section id="collections" class="collections section-padding">
+        <div class="section-header">
+            <h2 class="section-title">Dance Costumes</h2>
+            <p class="section-subtitle">Precision-tailored garments blending traditional weaves with stage-ready dynamic comfort.</p>
+        </div>
+        
+        <div class="grid-container">
+            <div class="grid-item">
+                <a href="{% url 'kuchipudi' %}"><h3>Kuchipudi</h3></a>
+            </div>
+            <div class="grid-item">
+                <a href="{% url 'bharatnatyam' %}"><h3>Bharatnatyam</h3></a>
+            </div>
+            <div class="grid-item">
+                <a href="{% url 'mohiniyattam' %}"><h3>Mohiniyattam</h3></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= JEWELLERY ================= -->
+    <section id="jewellery" class="digital-grid section-padding">
+        <div class="section-header">
+            <h2 class="section-title">Ornaments</h2>
+            <p class="section-subtitle">Intricate, luminous accessories engineered to perfectly capture and reflect stage lighting.</p>
+        </div>
+        
+        <div class="grid-container">
+            <div class="grid-item">
+                <a href="{% url 'jewellery' %}"><h3>Jewellery</h3></a>
+            </div>
+            <div class="grid-item">
+                <a href="{% url 'antique_jewellery' %}"><h3>Antique Jewellery</h3></a>
+            </div>
+            <div class="grid-item">
+                <a href="{% url 'hair_floral' %}"><h3>Hair & Floral</h3></a>
+            </div>
+        </div>
+    </section>
+
+ <!-- ================= FOOTER ================= -->
+    <footer id="contact">
+        <h2>Initiate Contact</h2>
+        <div class="contact-grid">
+            <div class="contact-item">
+                <h3>Location</h3>
+                <!-- Now a clickable Google Maps link! -->
+                <p>
+                    <a href="https://maps.app.goo.gl/dpFy2yDn2gi2U4Rx8?g_st=aw" target="_blank" style="color: var(--gold-bright); text-decoration: none; display: inline-block; transition: 0.3s;">
+                        Opp. Urakam South Bus stop<br>Urakam South,Thrissur
+                    </a>
+                </p>
+            </div>
+            <div class="contact-item">
+                <h3>Contact Us</h3>
+                <!-- Clickable WhatsApp link! -->
+                <p>
+                    <a href="https://wa.me/919447301145" target="_blank" style="color: var(--gold-bright); text-decoration: none; display: inline-block; transition: 0.3s;">
+                        +91 94 47 30 11 45 (WhatsApp)
+                    </a>
+                </p>
+                 <p>
+                    <a href="https://wa.me/918075265943" target="_blank" style="color: var(--gold-bright); text-decoration: none; display: inline-block; transition: 0.3s;">
+                        +91 80 75 26 59 43  (WhatsApp)
+                    </a>            
+                </p>
+                <p>
+                    <a href="https://wa.me/919605758731" target="_blank" style="color: var(--gold-bright); text-decoration: none; display: inline-block; transition: 0.3s;">
+                    +91 96 05 75 87 31  (WhatsApp)
+                </a>
+            </p>
+               
+            </div>
+        </div>
+        <p class="copyright">&copy; 2026 Amma Dance Collections. Systems Online.</p>
+    </footer>
+
+</body>
+</html>

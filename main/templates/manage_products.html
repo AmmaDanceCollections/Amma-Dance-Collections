@@ -1,0 +1,219 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center | Amma Dance Collections</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #030304;
+            --bg-panel: rgba(15, 15, 18, 0.7);
+            --gold: #D4AF37;
+            --gold-bright: #FFE58F;
+            --text-main: #E8E8E8;
+            --text-muted: #8A8A93;
+            --danger: #ff4757;
+            --glow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Montserrat', sans-serif; padding-bottom: 50px; }
+        
+        /* Admin Navbar */
+        nav {
+            background: rgba(3,3,4,0.9);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: var(--glow);
+        }
+        nav h2 { font-family: 'Playfair Display', serif; color: var(--gold); letter-spacing: 2px; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 30px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 2px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--gold-bright); }
+
+        .container { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
+
+        /* Glassmorphism Panels */
+        .panel {
+            background: var(--bg-panel);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+
+        .panel-title { font-family: 'Playfair Display', serif; color: var(--gold-bright); font-size: 2rem; margin-bottom: 30px; letter-spacing: 1px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 15px; }
+
+        /* Form Styling */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 20px; }
+        .form-group.full-width { grid-column: span 2; }
+        
+        label { color: var(--gold); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        input, select, textarea {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 15px;
+            color: white;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            transition: 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); box-shadow: var(--glow); }
+        
+        button {
+            background: transparent; border: 1px solid var(--gold); color: var(--gold);
+            padding: 15px 40px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
+            cursor: pointer; transition: 0.3s; border-radius: 4px; margin-top: 10px;
+        }
+        button:hover { background: var(--gold); color: var(--bg-deep); box-shadow: var(--glow); }
+
+        /* Inventory Table */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; padding: 15px; color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.3); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+        tr:hover { background: rgba(212,175,55,0.05); }
+        
+        .inv-img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+        
+        .btn-delete {
+            background: transparent; border: 1px solid var(--danger); color: var(--danger);
+            padding: 8px 15px; font-size: 0.75rem; letter-spacing: 1px; margin-top: 0;
+        }
+        .btn-delete:hover { background: var(--danger); color: white; box-shadow: 0 0 15px rgba(255,71,87,0.4); }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h2>System Core // Admin</h2>
+        <div class="nav-links">
+            <a href="{% url 'home' %}" target="_blank">View Live Site</a>
+            <a href="{% url 'home' %}">Secure Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <!-- Add Product Panel -->
+        <div class="panel">
+            <h2 class="panel-title">Deploy New Product</h2>
+            
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Hidden action input to trigger the "add" block in views.py -->
+                <input type="hidden" name="action" value="add">
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" name="name" required placeholder="Enter product name...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" required>
+                            <option value="" disabled selected>Select Classification...</option>
+                            <option value="Bharatnatyam">Bharatnatyam</option>
+                            <option value="Kuchipudi">Kuchipudi</option>
+                            <option value="Mohiniyattam">Mohiniyattam</option>
+                            <option value="Jewellery">Jewellery</option>
+                            <option value="Antique Jewellery">Antique Jewellery</option>
+                            <option value="Hair & Floral">Hair & Floral Accessories</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="text" name="price" required placeholder="e.g. 4500">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sizes / Details</label>
+                        <input type="text" name="sizes" required placeholder="e.g. 32, 34, 36 OR Adjustable">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Description</label>
+                        <textarea name="description" rows="3" required placeholder="Enter detailed product specifications..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Product Image</label>
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+                </div>
+                
+                <button type="submit">Save to Database</button>
+            </form>
+        </div>
+
+        <!-- Inventory Panel -->
+        <div class="panel">
+            <h2 class="panel-title">Current Inventory Database</h2>
+            
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Visual</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Sizes</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="Product" class="inv-img">
+                                {% else %}
+                                    <span style="color: var(--text-muted); font-size: 0.8rem;">No Image</span>
+                                {% endif %}
+                            </td>
+                            <td style="font-weight: 600; color: var(--gold-bright);">{{ product.name }}</td>
+                            <td>{{ product.category }}</td>
+                            <td>₹{{ product.price }}</td>
+                            <td>{{ product.sizes }}</td>
+                            <td>
+                                <!-- UPDATED DELETE FORM -->
+                                <!-- Uses hidden inputs to trigger the "delete" block in views.py -->
+                                <form method="POST" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    
+                                    <button type="submit" class="btn-delete" onclick="return confirm('WARNING: Are you sure you want to delete {{ product.name }}? This action cannot be undone.');">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                Database empty. No products found.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

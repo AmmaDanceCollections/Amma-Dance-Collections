@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohiniyattam Collection - Amma Dance Collections</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --bg-dark: #050505; --gold: #D4AF37; --text-light: #f4f4f4; --text-muted: #a0a0a0; --font-heading: 'Playfair Display', serif; --font-body: 'Montserrat', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-dark); color: var(--text-light); font-family: var(--font-body); line-height: 1.6; }
+        h1, h2, h3 { font-family: var(--font-heading); color: var(--gold); font-weight: 600; }
+
+        nav { position: fixed; top: 0; width: 100%; padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background-color: rgba(5, 5, 5, 0.95); border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
+        .logo-img { height: 55px; width: auto; display: block; }
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s ease; }
+        .nav-links a:hover { color: var(--gold); }
+
+        .product-section { padding: 150px 50px 100px; max-width: 1200px; margin: 0 auto; display: flex; gap: 60px; align-items: flex-start; flex-wrap: wrap; }
+        .product-image-container { flex: 1; min-width: 350px; background-color: #111; border: 1px solid #222; padding: 20px; display: flex; justify-content: center; align-items: center; }
+        .product-img { width: 100%; height: auto; border-radius: 4px; min-height: 500px; object-fit: cover; }
+        
+        .product-info { flex: 1; min-width: 350px; }
+        .product-info h1 { font-size: 2.8rem; margin-bottom: 10px; }
+        .product-price { font-size: 1.8rem; color: var(--text-light); margin-bottom: 30px; font-weight: 500; }
+        .product-description { color: var(--text-muted); margin-bottom: 40px; font-size: 1.05rem; line-height: 1.8; }
+        
+        .size-container { margin-bottom: 40px; }
+        .size-container label { display: block; margin-bottom: 10px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); }
+        .size-select { width: 100%; max-width: 300px; padding: 12px; background-color: #0d0d0d; border: 1px solid #333; color: var(--text-light); font-family: var(--font-body); font-size: 1rem; outline: none; cursor: pointer; }
+        .size-select:focus { border-color: var(--gold); }
+        
+        .btn-buy { display: inline-block; padding: 18px 50px; background-color: var(--gold); color: var(--bg-dark); text-decoration: none; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s ease; border: 1px solid var(--gold); }
+        .btn-buy:hover { background-color: transparent; color: var(--gold); }
+
+        footer { background-color: #030303; text-align: center; padding: 80px 20px 40px; border-top: 1px solid #111; }
+        footer h2 { font-size: 2rem; margin-bottom: 40px; }
+        .contact-grid { display: flex; justify-content: center; gap: 80px; margin-bottom: 50px; flex-wrap: wrap; }
+        .contact-item h3 { font-size: 1.1rem; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
+        .contact-item p { color: var(--text-muted); line-height: 1.8; font-size: 1rem; }
+        .copyright { padding-top: 30px; border-top: 1px solid #1a1a1a; font-size: 0.85rem; color: #555; max-width: 600px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="logo-container">
+            <a href="{% url 'home' %}"><img src="{% static 'logo.png' %}" alt="Amma Dance Collections Logo" class="logo-img"></a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'home' %}#collections">Collections</a></li>
+            <li><a href="{% url 'home' %}#jewellery">Jewellery</a></li>
+            <li><a href="{% url 'home' %}#contact">Contact</a></li>
+        </ul>
+    </nav>
+<!-- Dynamic Product Loop -->
+    <div style="padding-top: 150px;"> <!-- Spacer to clear the navbar -->
+        {% for product in products %}
+        <section class="product-section" style="padding-top: 0; padding-bottom: 80px;">
+            
+            <div class="product-image-container">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-img">
+                {% else %}
+                    <div style="color: var(--text-muted); text-align: center;">No Image Uploaded</div>
+                {% endif %}
+            </div>
+
+            <div class="product-info">
+                <h1>{{ product.name }}</h1>
+                <div class="product-price">₹{{ product.price }}</div>
+                
+                <p class="product-description">
+                    {{ product.description }}
+                </p>
+
+                <div class="size-container">
+                    <label>Available Sizes</label>
+                    <p style="color: var(--text-light); font-size: 1.1rem; margin-top: 5px;">{{ product.sizes }}</p>
+                </div>
+
+                <a href="https://wa.me/919447301145?text=Hello,%20I%20would%20like%20to%20inquire%20about%20the%20{{ product.name }}." target="_blank" class="btn-buy">
+                    Order via WhatsApp
+                </a>
+            </div>
+        </section>
+        
+        {% empty %}
+        <div style="text-align: center; padding: 100px 20px;">
+            <h2 style="color: var(--text-muted);">No products available in this collection yet.</h2>
+            <p>Please check back later or contact us for custom orders.</p>
+        </div>
+        {% endfor %}
+    </div>
+    <footer id="contact">
+        <div class="footer-content">
+            <h2>Get in Touch</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <h3>Visit Us</h3>
+                    <p>Opp. Urakam South Bus Stop<br>Urakam South, Thrissur</p>
+                </div>
+                <div class="contact-item">
+                    <h3>Call or WhatsApp</h3>
+                    <p>+91 94 47 30 11 45 (WhatsApp)</p>
+                    <p>+91 96 05 75 87 31</p>
+                    <p>+91 80 75 26 59 43</p>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2026 Amma Dance Collections. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
