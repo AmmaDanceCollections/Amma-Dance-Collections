@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed | Amma Dance{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-container {
+        padding: 15vh 4vw;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .success-title {
+        font-family: var(--font-serif);
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        font-weight: 400;
+        text-transform: uppercase;
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+        color: var(--text-light);
+    }
+
+    .success-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        max-width: 600px;
+        font-weight: 300;
+    }
+
+    .btn-home {
+        display: inline-block;
+        margin-top: 30px;
+        background: transparent;
+        color: var(--text-light);
+        text-decoration: none;
+        font-family: var(--font-sans);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 18px 40px;
+        border: 1px solid var(--border-subtle);
+        transition: all var(--transition-fast);
+    }
+
+    .btn-home:hover {
+        background: var(--text-light);
+        color: var(--bg-dark);
+        border-color: var(--text-light);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="success-container">
+    <h1 class="success-title">Order Received.</h1>
+    <p class="success-subtitle">
+        Thank you for choosing Amma Dance Collections. Our studio team has received your archive request and will contact you shortly via phone/WhatsApp to confirm dispatch and sizing details.
+    </p>
+    <a href="/" class="btn-home">Return to Studio ↗</a>
+</div>
+{% endblock %}

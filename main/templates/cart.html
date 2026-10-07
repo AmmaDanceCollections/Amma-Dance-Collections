@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Archive Cart | Amma Dance{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-container { padding: 10vh 4vw 15vh 4vw; max-width: 1400px; margin: 0 auto; }
+    .cart-header { font-family: var(--font-serif); font-size: clamp(3rem, 8vw, 6rem); font-weight: 400; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 6vh; border-bottom: 1px solid var(--border-subtle); padding-bottom: 2vh; }
+    .cart-table { width: 100%; border-collapse: collapse; margin-bottom: 8vh; }
+    .cart-table th { font-family: var(--font-sans); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); text-align: left; padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle); }
+    .cart-row { border-bottom: 1px solid var(--border-subtle); transition: background var(--transition-fast); }
+    .cart-row:hover { background: rgba(255, 255, 255, 0.02); }
+    .cart-td { padding: 30px 0; vertical-align: middle; }
+    .cart-item-info { display: flex; align-items: center; gap: 30px; }
+    .cart-item-img { width: 90px; height: 120px; object-fit: cover; filter: grayscale(100%); transition: filter var(--transition-fast); }
+    .cart-row:hover .cart-item-img { filter: grayscale(0%); }
+    .cart-item-name { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-light); }
+    .cart-item-price, .cart-item-total { font-family: var(--font-sans); font-size: 1rem; color: var(--text-light); }
+    .cart-qty { font-family: var(--font-sans); font-size: 1.2rem; color: var(--text-muted); }
+    .cart-remove { color: var(--text-muted); text-decoration: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; transition: color var(--transition-fast); }
+    .cart-remove:hover { color: #ff4444; }
+    .cart-summary { display: flex; flex-direction: column; align-items: flex-end; gap: 15px; }
+    .cart-total-label { font-family: var(--font-sans); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+    .cart-total-amount { font-family: var(--font-serif); font-size: 3.5rem; color: var(--accent-gold); line-height: 1; }
+    .btn-checkout { background: var(--text-light); color: var(--bg-dark); text-decoration: none; font-family: var(--font-sans); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; padding: 20px 50px; transition: all var(--transition-fast); display: inline-block; margin-top: 30px; }
+    .btn-checkout:hover { background: var(--accent-gold); color: var(--bg-dark); }
+    .empty-cart { padding: 10vh 0; font-family: var(--font-serif); font-size: clamp(1.5rem, 3vw, 2.5rem); color: var(--text-muted); font-style: italic; }
+
+    @media (max-width: 768px) {
+        .cart-table thead { display: none; }
+        .cart-row { display: flex; flex-direction: column; padding: 20px 0; position: relative; }
+        .cart-td { padding: 10px 0; }
+        .cart-summary { align-items: flex-start; margin-top: 40px; }
+        .btn-checkout { width: 100%; text-align: center; }
+        .cart-remove { position: absolute; right: 0; top: 30px; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cart-container">
+    <h1 class="cart-header">Your Archive</h1>
+
+    {% if items %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr class="cart-row">
+                <td class="cart-td">
+                    <div class="cart-item-info">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="cart-item-img">
+                        {% else %}
+                            <div style="width:90px; height:120px; background:rgba(255,255,255,0.02); display:flex; align-items:center; justify-content:center;">
+                                <span style="color:var(--text-muted); font-size:0.7rem; font-family:var(--font-sans);">NO IMG</span>
+                            </div>
+                        {% endif %}
+                        <span class="cart-item-name">{{ item.product.name }}</span>
+                    </div>
+                </td>
+                <td class="cart-td cart-item-price">₹{{ item.product.price }}</td>
+                <td class="cart-td cart-qty">{{ item.quantity }}</td>
+                <td class="cart-td cart-item-total">₹{{ item.line_total }}</td>
+                <td class="cart-td" style="text-align: right;">
+                    <a href="{% url 'remove_from_cart' item.product.id %}" class="cart-remove">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-summary">
+        <span class="cart-total-label">Estimated Total</span>
+        <span class="cart-total-amount">₹{{ total }}</span>
+        <a href="{% url 'checkout' %}" class="btn-checkout">Proceed to Checkout</a>
+    </div>
+    {% else %}
+    <div class="empty-cart">
+        Your archive is currently empty.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

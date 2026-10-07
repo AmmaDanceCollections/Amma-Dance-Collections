@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Amma Dance Collections | Studio{% endblock %}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #070707;
+            --text-light: #F4F4F4;
+            --text-muted: #888888;
+            --accent-gold: #C5A059;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+            --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection { background: var(--accent-gold); color: var(--bg-dark); }
+        html { scroll-behavior: smooth; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-light); 
+            font-family: var(--font-sans); 
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 20px 4vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(7, 7, 7, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            transition: opacity var(--transition-fast);
+        }
+        
+        .logo-container:hover { opacity: 0.8; }
+
+        .logo-img {
+            height: 45px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text-light);
+            letter-spacing: 1px;
+        }
+
+        .nav-links { display: flex; gap: 40px; list-style: none; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 100%; height: 1px;
+            background: var(--text-light);
+            transform: translateX(-101%);
+            transition: transform var(--transition-fast);
+        }
+        .nav-links a:hover::after { transform: translateX(0); }
+
+        main { flex: 1; margin-top: 85px; }
+
+        /* =========================================
+           FOOTER & SLEEK CONTACT DIRECTORY
+        ========================================= */
+        footer {
+            padding: 15vh 4vw 4vw 4vw;
+            background: #030303;
+            border-top: 1px solid var(--border-subtle);
+            margin-top: auto;
+        }
+        
+        .footer-huge {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 12vw, 12rem);
+            line-height: 1;
+            text-transform: uppercase;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 8vh;
+        }
+
+        .contact-directory {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 10vh;
+            flex-wrap: wrap;
+        }
+
+        .contact-person {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-role {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            font-style: italic;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .contact-links a {
+            font-family: var(--font-sans);
+            color: var(--text-light);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 5px;
+            transition: all var(--transition-fast);
+        }
+
+        .contact-links a:hover {
+            color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 30px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .location-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .location-link:hover { color: var(--accent-gold); }
+
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; flex-direction: column; gap: 15px; }
+            .logo-img { height: 35px; }
+            .logo-text { font-size: 1rem; }
+            .nav-links { gap: 15px; flex-wrap: wrap; justify-content: center; }
+            .nav-links a { font-size: 0.7rem; }
+            main { margin-top: 110px; }
+            .contact-directory { gap: 40px; flex-direction: column; }
+            .footer-bottom { flex-direction: column; align-items: center; gap: 15px; text-align: center; }
+        }
+
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" class="logo-container">
+            <img src="{% static 'logo.png' %}" alt="Amma Dance Logo" class="logo-img">
+            <span class="logo-text">Amma Dance Collections</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="/#about">Studio</a></li>
+            <li><a href="/#collections">Archive</a></li>
+            <!-- HIDDEN E-COMMERCE CART LINK
+            <li><a href="/cart/">Cart</a></li>
+            -->
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer id="contact">
+        <div class="footer-huge">Let's Create.</div>
+        
+        <!-- SLEEK CONTACT DIRECTORY GRID -->
+        <div class="contact-directory">
+             <!-- Contact Person 1 -->
+            <div class="contact-person">
+                <span class="contact-role">Custom Orders</span>
+                <div class="contact-links">
+                    <!-- ADD YOUR 3RD NUMBER HERE -->
+                    <a href="https://wa.me/9447301145" target="_blank">WhatsApp</a>
+                    <a href="tel:+919447301145">Call</a>
+                </div>
+            </div>
+            <!-- Contact Person 2 -->
+            <div class="contact-person">
+                <span class="contact-role">Primary Booking</span>
+                <div class="contact-links">
+                    <a href="https://wa.me/918075265943" target="_blank">WhatsApp</a>
+                    <a href="tel:+918075265943">Call</a>
+                </div>
+            </div>
+
+            <!-- Contact Person 3 -->
+            <div class="contact-person">
+                <span class="contact-role">Studio Support</span>
+                <div class="contact-links">
+                    <a href="https://wa.me/919605758731" target="_blank">WhatsApp</a>
+                    <a href="tel:+919605758731">Call</a>
+                </div>
+            </div>
+
+           
+
+        </div>
+
+        <div class="footer-bottom">
+            <a href="https://maps.app.goo.gl/npXEMdgpvPAC3jjx6" target="_blank" class="location-link">Thrissur, Kerala ↗</a>
+            <span>© 2026 Amma Dance Collections</span>
+        </div>
+    </footer>
+
+</body>
+</html>

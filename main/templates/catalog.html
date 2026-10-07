@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block title %}Catalog | Amma Dance Collections{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+            <p class="mb-2 text-sm uppercase tracking-[0.3em] text-yellow-300">Curated Designs</p>
+            <h1 class="text-4xl font-semibold md:text-5xl">Dancewear & Accessories</h1>
+        </div>
+        <a href="{% url 'cart_page' %}" class="rounded-full border border-yellow-500/40 bg-yellow-500/10 px-5 py-3 text-sm uppercase tracking-[0.2em] text-yellow-200 hover:bg-yellow-500/20">
+            View Cart
+        </a>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-[280px_1fr]">
+        <aside class="glass rounded-2xl border border-white/10 p-5">
+            <h2 class="mb-5 text-lg font-medium uppercase tracking-[0.2em] text-yellow-300">Filters</h2>
+
+            <form id="filter-form" class="space-y-6">
+                <div>
+                    <label class="mb-2 block text-sm text-neutral-300">Search</label>
+                    <input id="search-input" type="text" placeholder="Search products" class="w-full rounded-xl border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white placeholder:text-neutral-500 focus:border-yellow-400 focus:outline-none" />
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm text-neutral-300">Category</label>
+                    <select id="category-filter" class="w-full rounded-xl border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                        <option value="all">All</option>
+                        <option value="Bharatnatyam">Bharatnatyam</option>
+                        <option value="Kuchipudi">Kuchipudi</option>
+                        <option value="Mohiniyattam">Mohiniyattam</option>
+                        <option value="Jewellery">Jewellery</option>
+                        <option value="Antique Jewellery">Antique Jewellery</option>
+                        <option value="Hair & Floral">Hair & Floral</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm text-neutral-300">Style</label>
+                    <select id="style-filter" class="w-full rounded-xl border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                        <option value="all">All</option>
+                        <option value="Classic">Classic</option>
+                        <option value="Contemporary">Contemporary</option>
+                        <option value="Festive">Festive</option>
+                        <option value="Minimal">Minimal</option>
+                        <option value="Statement">Statement</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="mb-2 block text-sm text-neutral-300">Max Price</label>
+                    <input id="max-price" type="range" min="500" max="20000" step="500" value="20000" class="w-full accent-yellow-400" />
+                    <div class="mt-2 text-sm text-neutral-300">Up to: ₹<span id="price-label">20000</span></div>
+                </div>
+
+                <button type="reset" class="w-full rounded-xl border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-200 hover:border-yellow-400 hover:text-yellow-300">
+                    Clear Filters
+                </button>
+            </form>
+        </aside>
+
+        <div class="space-y-6">
+            <div id="product-grid" class="grid gap-6 md:grid-cols-2 xl:grid-cols-3"></div>
+
+            <div class="flex justify-center">
+                <button id="load-more-btn" type="button" class="hidden rounded-full border border-yellow-500/50 bg-yellow-500/10 px-6 py-3 text-sm uppercase tracking-[0.2em] text-yellow-200 hover:bg-yellow-500/20">
+                    Load More
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const grid = document.getElementById('product-grid');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const searchInput = document.getElementById('search-input');
+    const categoryFilter = document.getElementById('category-filter');
+    const styleFilter = document.getElementById('style-filter');
+    const maxPriceInput = document.getElementById('max-price');
+    const priceLabel = document.getElementById('price-label');
+
+    let currentPage = 1;
+    let hasMore = true;
+    let currentQuery = '';
+    let currentCategory = 'all';
+    let currentStyle = 'all';
+    let currentMaxPrice = 20000;
+
+    function updatePriceLabel() {
+        priceLabel.textContent = Number(maxPriceInput.value).toLocaleString('en-IN');
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    async function fetchProducts(reset = false) {
+        if (reset) {
+            currentPage = 1;
+            hasMore = true;
+            grid.innerHTML = '<div class="col-span-full rounded-2xl border border-dashed border-neutral-700 bg-neutral-900/60 p-10 text-center text-neutral-400">Loading products...</div>';
+        }
+
+        const params = new URLSearchParams({
+            q: currentQuery,
+            category: currentCategory,
+            style: currentStyle,
+            max_price: currentMaxPrice,
+            page: currentPage,
+        });
+
+        try {
+            const response = await fetch(`/catalog/filter/?${params.toString()}`, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch products');
+
+            const data = await response.json();
+            if (reset) {
+                grid.innerHTML = data.html;
+            } else {
+                grid.insertAdjacentHTML('beforeend', data.html);
+            }
+
+            hasMore = data.has_more;
+            loadMoreBtn.classList.toggle('hidden', !hasMore);
+            loadMoreBtn.textContent = hasMore ? 'Load More' : 'No More Items';
+        } catch (error) {
+            console.error(error);
+            grid.innerHTML = '<div class="col-span-full rounded-2xl border border-red-500/30 bg-red-500/10 p-10 text-center text-red-300">Unable to load products.</div>';
+        }
+    }
+
+    searchInput.addEventListener('input', (event) => {
+        currentQuery = event.target.value.trim();
+        fetchProducts(true);
+    });
+
+    categoryFilter.addEventListener('change', (event) => {
+        currentCategory = event.target.value;
+        fetchProducts(true);
+    });
+
+    styleFilter.addEventListener('change', (event) => {
+        currentStyle = event.target.value;
+        fetchProducts(true);
+    });
+
+    maxPriceInput.addEventListener('input', () => {
+        currentMaxPrice = Number(maxPriceInput.value);
+        updatePriceLabel();
+        fetchProducts(true);
+    });
+
+    document.getElementById('filter-form').addEventListener('reset', () => {
+        setTimeout(() => {
+            currentQuery = '';
+            currentCategory = 'all';
+            currentStyle = 'all';
+            currentMaxPrice = 20000;
+            maxPriceInput.value = 20000;
+            updatePriceLabel();
+            fetchProducts(true);
+        }, 0);
+    });
+
+    loadMoreBtn.addEventListener('click', () => {
+        if (!hasMore) return;
+        currentPage += 1;
+        fetchProducts(false);
+    });
+
+    document.addEventListener('click', async (event) => {
+        const cartButton = event.target.closest('[data-add-to-cart]');
+        const favoriteButton = event.target.closest('[data-toggle-favorite]');
+
+        if (cartButton) {
+            const productId = cartButton.dataset.addToCart;
+            try {
+                const response = await fetch(`/cart/add/${productId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    const cartBadge = document.getElementById('cart-count');
+                    if (cartBadge) cartBadge.textContent = data.cart_count;
+                    cartButton.textContent = 'Added';
+                    cartButton.disabled = true;
+                    cartButton.classList.add('opacity-70');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        if (favoriteButton) {
+            const productId = favoriteButton.dataset.toggleFavorite;
+            try {
+                const response = await fetch(`/favorites/toggle/${productId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    favoriteButton.textContent = data.is_favorite ? 'Saved' : 'Save';
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    });
+
+    updatePriceLabel();
+    fetchProducts(true);
+</script>
+{% endblock %}
+

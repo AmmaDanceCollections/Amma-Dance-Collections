@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} | Amma Dance{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* =========================================
+       EDITORIAL PRODUCT DETAIL LAYOUT
+    ========================================= */
+    .product-view-container {
+        padding: 8vh 4vw 15vh 4vw;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6vw;
+        align-items: center;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    /* Left Side: Controlled, High-End Image Frame */
+    .product-image-col {
+        width: 100%;
+        max-height: 75vh;
+        aspect-ratio: 3/4;
+        background: rgba(255, 255, 255, 0.02);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .product-image-col img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(100%);
+        transition: filter var(--transition-slow), transform var(--transition-slow);
+    }
+
+    .product-image-col:hover img {
+        filter: grayscale(0%);
+        transform: scale(1.02);
+    }
+
+    /* Right Side: Typography & Actions */
+    .product-info-col {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .product-view-title {
+        font-family: var(--font-serif);
+        font-size: clamp(3rem, 5vw, 6rem);
+        font-weight: 400;
+        text-transform: uppercase;
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+        margin-bottom: 2vh;
+        color: var(--text-light);
+    }
+
+    .product-view-price {
+        font-family: var(--font-sans);
+        font-size: 1.4rem;
+        color: var(--accent-gold);
+        margin-bottom: 4vh;
+        letter-spacing: 1px;
+    }
+
+    .product-view-desc {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: var(--text-muted);
+        margin-bottom: 5vh;
+        max-width: 90%;
+        font-weight: 300;
+    }
+
+    /* Direct Inquiry Actions (Active) */
+    .inquiry-actions {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .btn-inquire {
+        background: var(--text-light);
+        color: var(--bg-dark);
+        font-family: var(--font-sans);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 22px 40px;
+        border: 1px solid var(--text-light);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        text-decoration: none;
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .btn-inquire:hover {
+        background: transparent;
+        color: var(--text-light);
+    }
+
+    .btn-call {
+        background: transparent;
+        color: var(--text-light);
+        font-family: var(--font-sans);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        padding: 22px 40px;
+        border: 1px solid var(--border-subtle);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        text-decoration: none;
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .btn-call:hover {
+        border-color: var(--text-light);
+    }
+
+    /* E-Commerce Cart Styles (Currently Dormant) */
+    .add-to-cart-form { display: flex; flex-direction: column; gap: 25px; max-width: 400px; margin-top: 30px; }
+    .qty-wrapper { display: flex; align-items: center; gap: 20px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px; }
+    .qty-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; }
+    .qty-input { background: transparent; border: none; color: var(--text-light); font-family: var(--font-sans); font-size: 1.1rem; width: 60px; outline: none; }
+    .btn-add-cart { background: var(--text-light); color: var(--bg-dark); font-family: var(--font-sans); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; padding: 22px 0; border: none; cursor: pointer; transition: background var(--transition-fast), color var(--transition-fast); text-align: center; width: 100%; }
+    .btn-add-cart:hover { background: var(--accent-gold); color: var(--bg-dark); }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        .product-view-container { grid-template-columns: 1fr; gap: 40px; padding-top: 2vh; }
+        .product-image-col { max-height: 60vh; }
+        .product-view-desc { max-width: 100%; }
+        .inquiry-actions { flex-direction: column; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="product-view-container">
+    
+    <!-- LEFT: CONTROLLED IMAGE FRAME -->
+    <div class="product-image-col">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <img src="{% static 'logo.png' %}" alt="Amma Dance" style="object-fit: contain; padding: 4rem; opacity: 0.3;">
+        {% endif %}
+    </div>
+
+    <!-- RIGHT: TYPOGRAPHY & ACTIONS -->
+    <div class="product-info-col">
+        <h1 class="product-view-title">{{ product.name }}</h1>
+        <div class="product-view-price">₹{{ product.price }}</div>
+        
+        <div class="product-view-desc">
+            {% if product.description %}
+                {{ product.description }}
+            {% else %}
+                An exquisite piece from our studio archive, meticulously crafted for the modern classical performer.
+            {% endif %}
+        </div>
+
+        <!-- ACTIVE: Direct Inquiry Buttons -->
+        <div class="inquiry-actions">
+            <!-- Automatically drafts a WhatsApp message with the specific product name -->
+            <a href="https://wa.me/919447301145?text=Hello,%20I%20would%20like%20to%20inquire%20about%20the%20{{ product.name|urlencode }}." target="_blank" class="btn-inquire">
+                Inquire via WhatsApp ↗
+            </a>
+            
+            <a href="tel:+919447301145" class="btn-call">
+                Call Studio
+            </a>
+        </div>
+
+        {% comment %}
+        <!-- DORMANT: E-Commerce Cart Form (Secured by Django Comment) -->
+        <form action="{% url 'add_to_cart' product.id %}" method="POST" class="add-to-cart-form">
+            {% csrf_token %}
+            <div class="qty-wrapper">
+                <span class="qty-label">Quantity</span>
+                <input type="number" name="quantity" value="1" min="1" class="qty-input">
+            </div>
+            <button type="submit" class="btn-add-cart">Add to Archive</button>
+        </form>
+        {% endcomment %}
+        
+    </div>
+
+</div>
+{% endblock %}

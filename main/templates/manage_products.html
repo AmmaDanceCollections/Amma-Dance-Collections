@@ -9,73 +9,40 @@
     
     <style>
         :root {
-            --bg-deep: #030304;
-            --bg-panel: rgba(15, 15, 18, 0.7);
-            --gold: #D4AF37;
-            --gold-bright: #FFE58F;
-            --text-main: #E8E8E8;
-            --text-muted: #8A8A93;
-            --danger: #ff4757;
+            --bg-deep: #030304; --bg-panel: rgba(15, 15, 18, 0.7); 
+            --gold: #D4AF37; --gold-bright: #FFE58F; 
+            --text-main: #E8E8E8; --text-muted: #8A8A93; 
+            --danger: #ff4757; --cyan: #00d2d3;
             --glow: 0 0 20px rgba(212, 175, 55, 0.15);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg-deep); color: var(--text-main); font-family: 'Montserrat', sans-serif; padding-bottom: 50px; }
         
-        /* Admin Navbar */
-        nav {
-            background: rgba(3,3,4,0.9);
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: var(--glow);
-        }
+        nav { background: rgba(3,3,4,0.9); padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(212, 175, 55, 0.2); box-shadow: var(--glow); }
         nav h2 { font-family: 'Playfair Display', serif; color: var(--gold); letter-spacing: 2px; }
         .nav-links a { color: var(--text-muted); text-decoration: none; margin-left: 30px; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 2px; transition: 0.3s; }
         .nav-links a:hover { color: var(--gold-bright); }
 
         .container { max-width: 1200px; margin: 50px auto; padding: 0 20px; }
 
-        /* Glassmorphism Panels */
-        .panel {
-            background: var(--bg-panel);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            border-radius: 8px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-
+        .panel { background: var(--bg-panel); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.1); border-radius: 8px; padding: 40px; margin-bottom: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         .panel-title { font-family: 'Playfair Display', serif; color: var(--gold-bright); font-size: 2rem; margin-bottom: 30px; letter-spacing: 1px; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 15px; }
 
-        /* Form Styling */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-group { display: flex; flex-direction: column; margin-bottom: 20px; }
         .form-group.full-width { grid-column: span 2; }
         
         label { color: var(--gold); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-        input, select, textarea {
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 15px;
-            color: white;
-            border-radius: 4px;
-            font-family: 'Montserrat', sans-serif;
-            transition: 0.3s;
-        }
+        input, select, textarea { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); padding: 15px; color: white; border-radius: 4px; font-family: 'Montserrat', sans-serif; transition: 0.3s; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); box-shadow: var(--glow); }
         
-        button {
-            background: transparent; border: 1px solid var(--gold); color: var(--gold);
-            padding: 15px 40px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;
-            cursor: pointer; transition: 0.3s; border-radius: 4px; margin-top: 10px;
-        }
-        button:hover { background: var(--gold); color: var(--bg-deep); box-shadow: var(--glow); }
+        .btn-main { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 15px 40px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; cursor: pointer; transition: 0.3s; border-radius: 4px; margin-top: 10px; }
+        .btn-main:hover { background: var(--gold); color: var(--bg-deep); box-shadow: var(--glow); }
+        
+        .btn-cancel { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); padding: 15px 40px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600; cursor: pointer; transition: 0.3s; border-radius: 4px; margin-top: 10px; margin-left: 10px; display: none; }
+        .btn-cancel:hover { background: var(--text-muted); color: var(--bg-deep); }
 
-        /* Inventory Table */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th { text-align: left; padding: 15px; color: var(--gold); border-bottom: 1px solid rgba(212,175,55,0.3); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
         td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
@@ -83,10 +50,10 @@
         
         .inv-img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
         
-        .btn-delete {
-            background: transparent; border: 1px solid var(--danger); color: var(--danger);
-            padding: 8px 15px; font-size: 0.75rem; letter-spacing: 1px; margin-top: 0;
-        }
+        .btn-edit { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 8px 15px; font-size: 0.75rem; letter-spacing: 1px; cursor: pointer; margin-right: 10px; transition: 0.3s; }
+        .btn-edit:hover { background: var(--cyan); color: var(--bg-deep); box-shadow: 0 0 15px rgba(0, 210, 211, 0.4); }
+
+        .btn-delete { background: transparent; border: 1px solid var(--danger); color: var(--danger); padding: 8px 15px; font-size: 0.75rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
         .btn-delete:hover { background: var(--danger); color: white; box-shadow: 0 0 15px rgba(255,71,87,0.4); }
 
     </style>
@@ -96,32 +63,34 @@
     <nav>
         <h2>System Core // Admin</h2>
         <div class="nav-links">
+            <a href="{% url 'a_home' %}">Dashboard</a>
+            <a href="{% url 'orders' %}">Orders</a>
             <a href="{% url 'home' %}" target="_blank">View Live Site</a>
-            <a href="{% url 'home' %}">Secure Logout</a>
         </div>
     </nav>
 
     <div class="container">
         
-        <!-- Add Product Panel -->
-        <div class="panel">
-            <h2 class="panel-title">Deploy New Product</h2>
+        <!-- Add/Edit Product Panel -->
+        <div class="panel" id="formPanel">
+            <h2 class="panel-title" id="formTitle">Deploy New Product</h2>
             
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" id="productForm">
                 {% csrf_token %}
                 
-                <!-- Hidden action input to trigger the "add" block in views.py -->
-                <input type="hidden" name="action" value="add">
+                <!-- Hidden inputs for logic tracking -->
+                <input type="hidden" name="action" id="formAction" value="add">
+                <input type="hidden" name="product_id" id="formProductId" value="">
 
                 <div class="form-grid">
                     <div class="form-group">
                         <label>Product Name</label>
-                        <input type="text" name="name" required placeholder="Enter product name...">
+                        <input type="text" name="name" id="prodName" required placeholder="Enter product name...">
                     </div>
                     
                     <div class="form-group">
                         <label>Category</label>
-                        <select name="category" required>
+                        <select name="category" id="prodCategory" required>
                             <option value="" disabled selected>Select Classification...</option>
                             <option value="Bharatnatyam">Bharatnatyam</option>
                             <option value="Kuchipudi">Kuchipudi</option>
@@ -133,27 +102,39 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Style</label>
+                        <select name="style" id="prodStyle" required>
+                            <option value="Classic">Classic</option>
+                            <option value="Contemporary">Contemporary</option>
+                            <option value="Festive">Festive</option>
+                            <option value="Minimal">Minimal</option>
+                            <option value="Statement">Statement</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label>Price (₹)</label>
-                        <input type="text" name="price" required placeholder="e.g. 4500">
+                        <input type="text" name="price" id="prodPrice" required placeholder="e.g. 4500">
                     </div>
 
                     <div class="form-group">
                         <label>Sizes / Details</label>
-                        <input type="text" name="sizes" required placeholder="e.g. 32, 34, 36 OR Adjustable">
+                        <input type="text" name="sizes" id="prodSizes" required placeholder="e.g. 32, 34, 36 OR Adjustable">
                     </div>
 
                     <div class="form-group full-width">
                         <label>Description</label>
-                        <textarea name="description" rows="3" required placeholder="Enter detailed product specifications..."></textarea>
+                        <textarea name="description" id="prodDesc" rows="3" required placeholder="Enter detailed product specifications..."></textarea>
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Product Image</label>
+                        <label>Product Image <span id="imgNote" style="text-transform:none; font-size: 0.75rem; color:var(--text-muted);">(Leave blank to keep existing image during edits)</span></label>
                         <input type="file" name="image" accept="image/*">
                     </div>
                 </div>
                 
-                <button type="submit">Save to Database</button>
+                <button type="submit" class="btn-main" id="submitBtn">Save to Database</button>
+                <button type="button" class="btn-cancel" id="cancelBtn" onclick="cancelEdit()">Cancel Edit</button>
             </form>
         </div>
 
@@ -170,7 +151,7 @@
                             <th>Category</th>
                             <th>Price</th>
                             <th>Sizes</th>
-                            <th>Action</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -188,16 +169,15 @@
                             <td>₹{{ product.price }}</td>
                             <td>{{ product.sizes }}</td>
                             <td>
-                                <!-- UPDATED DELETE FORM -->
-                                <!-- Uses hidden inputs to trigger the "delete" block in views.py -->
+                                <!-- EDIT BUTTON -->
+                                <button type="button" class="btn-edit" onclick="triggerEdit('{{ product.id }}', '{{ product.name|escapejs }}', '{{ product.category|escapejs }}', '{{ product.price|escapejs }}', '{{ product.sizes|escapejs }}', '{{ product.description|escapejs }}')">EDIT</button>
+
+                                <!-- DELETE FORM -->
                                 <form method="POST" style="display: inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="product_id" value="{{ product.id }}">
-                                    
-                                    <button type="submit" class="btn-delete" onclick="return confirm('WARNING: Are you sure you want to delete {{ product.name }}? This action cannot be undone.');">
-                                        Delete
-                                    </button>
+                                    <button type="submit" class="btn-delete" onclick="return confirm('WARNING: Are you sure you want to delete {{ product.name }}?');">DELETE</button>
                                 </form>
                             </td>
                         </tr>
@@ -214,6 +194,45 @@
         </div>
 
     </div>
+
+    <!-- JavaScript to handle the Edit automation -->
+    <script>
+        function triggerEdit(id, name, category, price, sizes, desc) {
+            // 1. Scroll back up to the form smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // 2. Change the visual styling of the form
+            document.getElementById('formTitle').innerText = "Modify Product Database";
+            document.getElementById('submitBtn').innerText = "Update Product";
+            document.getElementById('cancelBtn').style.display = "inline-block";
+            
+            // 3. Populate the hidden logic fields for views.py
+            document.getElementById('formAction').value = "edit";
+            document.getElementById('formProductId').value = id;
+            
+            // 4. Fill in all the current product data
+            document.getElementById('prodName').value = name;
+            document.getElementById('prodCategory').value = category;
+            document.getElementById('prodStyle').value = 'Classic';
+            document.getElementById('prodPrice').value = price;
+            document.getElementById('prodSizes').value = sizes;
+            document.getElementById('prodDesc').value = desc;
+        }
+
+        function cancelEdit() {
+            // 1. Clear the form completely
+            document.getElementById('productForm').reset();
+            
+            // 2. Reset the visuals back to Add Mode
+            document.getElementById('formTitle').innerText = "Deploy New Product";
+            document.getElementById('submitBtn').innerText = "Save to Database";
+            document.getElementById('cancelBtn').style.display = "none";
+            
+            // 3. Reset the logic inputs back to Add Mode
+            document.getElementById('formAction').value = "add";
+            document.getElementById('formProductId').value = "";
+        }
+    </script>
 
 </body>
 </html>
